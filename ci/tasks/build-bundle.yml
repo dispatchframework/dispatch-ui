@@ -1,0 +1,26 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: node}
+
+inputs:
+- name: dispatch-ui
+  path: src/github.com/dispatchframework/dispatch-ui
+
+outputs:
+- name: dispatch-ui-binaries
+
+run:
+  path: /bin/bash
+  args:
+  - -c
+  - |
+    set -e -u -x
+
+    export CUR=$PWD
+    cd $CUR/src/github.com/dispatchframework/dispatch-ui
+    npm install
+    npm run build
+    mv build/* $CUR/dispatch-ui-binaries/
