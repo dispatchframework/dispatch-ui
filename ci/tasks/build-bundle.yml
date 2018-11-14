@@ -19,8 +19,8 @@ run:
   - |
     set -e -u -x
 
-    export CUR=$PWD
-    cd $CUR/src/github.com/dispatchframework/dispatch-ui
+    export GOPATH=$PWD
+    cd $GOPATH/src/github.com/dispatchframework/dispatch-ui
     npm install
     npm run build
-    mv build/* $CUR/dispatch-ui-binaries/
+    mv build/* $GOPATH/dispatch-ui-binaries/
