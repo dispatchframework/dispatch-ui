@@ -3,7 +3,7 @@ resources:
 - name: dispatch-ui
   type: git
   source:
-    uri: https://github.com/pzmrzy/dispatch-ui.git
+    uri: https://github.com/dispatchframework/dispatch-ui.git
     branch: release
 
 - name: version-ui
@@ -16,12 +16,12 @@ resources:
     access_key_id: ((s3-ci-bucket-access-key))
     secret_access_key: ((s3-ci-bucket-secret-key))
 
-# - name: gh-release
-#   type: github-release
-#   source:
-#     owner: dispatchframework
-#     repository: dispatch-ui
-#     access_token: ((github-access-token))
+- name: gh-release
+  type: github-release
+  source:
+    owner: dispatchframework
+    repository: dispatch-ui
+    access_token: ((github-access-token))
 
 jobs:
 - name: major
@@ -69,10 +69,10 @@ jobs:
     file: dispatch-ui/ci/tasks/prepare-version.yml
   - task: build-ui-binaries
     file: dispatch-ui/ci/tasks/build-bundle.yml
-  # - put: gh-release
-  #   params:
-  #     name: release-context/tag
-  #     tag: release-context/tag
-  #     commitish: release-context/branch
-  #     globs:
-  #     - dispatch-ui-binaries/dispatch-ui.tar.gz
+  - put: gh-release
+    params:
+      name: release-context/tag
+      tag: release-context/tag
+      commitish: release-context/branch
+      globs:
+      - dispatch-ui-binaries/dispatch-ui.tar.gz
