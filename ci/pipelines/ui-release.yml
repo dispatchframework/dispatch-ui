@@ -16,12 +16,12 @@ resources:
     access_key_id: ((s3-ci-bucket-access-key))
     secret_access_key: ((s3-ci-bucket-secret-key))
 
-- name: gh-release
-  type: github-release
-  source:
-    owner: vmware
-    repository: dispatch
-    access_token: ((github-access-token))
+# - name: gh-release
+#   type: github-release
+#   source:
+#     owner: dispatchframework
+#     repository: dispatch-ui
+#     access_token: ((github-access-token))
 
 jobs:
 - name: major
@@ -57,14 +57,6 @@ jobs:
     resource: version-ui
     params: {file: version/version}
 
-- name: build-dispath-ui
-  public: true
-  plan:
-  - get: dispatch-ui
-    resource: dispatch-ui
-  - task: build-ui
-    file: dispatch-ui/ci/tasks/build-bundle.yml
-
 - name: release
   public: true
   plan:
@@ -73,15 +65,14 @@ jobs:
     trigger: true
   - get: dispatch-ui
     resource:  dispatch-ui
-    passed: [build-dispath-ui]
   - task: prepare-version
     file: dispatch-ui/ci/tasks/prepare-version.yml
   - task: build-ui-binaries
     file: dispatch-ui/ci/tasks/build-bundle.yml
-  - put: gh-release
-    params:
-      name: release-context/tag
-      tag: release-context/tag
-      commitish: release-context/branch
-      globs:
-      - dispatch-ui-binaries/dispatch-ui.tar.gz
+  # - put: gh-release
+  #   params:
+  #     name: release-context/tag
+  #     tag: release-context/tag
+  #     commitish: release-context/branch
+  #     globs:
+  #     - dispatch-ui-binaries/dispatch-ui.tar.gz

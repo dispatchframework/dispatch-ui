@@ -20,6 +20,6 @@ run:
   - |
     set -e -x -u
 
-    export IMAGE_TAG=v$(cat version/version)-solo
+    export IMAGE_TAG=v$(cat version/version)
     echo ${IMAGE_TAG} > release-context/tag
-    echo solo > release-context/branch
+    echo master > release-context/branch
