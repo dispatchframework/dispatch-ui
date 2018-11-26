@@ -1,12 +1,14 @@
 #!/bin/python
 from flask import Flask, request
+import argparse
 import os
 
 app = Flask(__name__)
 
+org = "dispatch-server"
 def add_header(args):
 	args.append('"Cookie: cookie"')
-	args.append('"X-Dispatch-Org: default"')
+	args.append('"X-Dispatch-Org: %s"' % org)
 	args.append('"accept: application/json"')
 	args.append('"content-type: application/json"')
 
@@ -65,10 +67,15 @@ def run():
 	add_header(args)
 	args.append('"Accept-Encoding: gzip"')
 	cmd = " -H ".join(args)
-	cmd += " -d '%s'" % request.data
+	cmd += " -d '%s'" % request.data.decode("utf-8")
 	resp = os.popen(cmd).read()
 	return resp, 200, {'Access-Control-Allow-Origin': '*'}
 
 
 if __name__ == '__main__':
-    app.run()
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-o", "--organization", help="Organization name, default: dispatch-server")
+	args = parser.parse_args()
+	if args.organization:
+		org = args.organization
+	app.run()
